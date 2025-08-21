@@ -46,3 +46,11 @@ const users = [
 4. Handle errors gracefully in your async function.
 5. Use Promise.all to fetch two resources simultaneously and log both results.
 6. Try to implement a React component that fetches and displays data with loading and error states.
+
+## Section E: Closures, Scope & Higher-Order Functions in JavaScript (Vital for React)
+
+1. Write a closure that maintains a private variable and exposes increment and get functions.
+2. Write a higher-order function that takes a function and returns a new function logging the arguments before calling the original.
+3. Use an array’s .map() method to transform an array of numbers into their squares.
+4. Explain what happens with closures in the React useEffect hook with a dependency array.
+5. Write a React function component demonstrating a closure in an event handler.

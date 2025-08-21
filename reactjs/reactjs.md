@@ -540,9 +540,85 @@ function User() {
 export default User;
 ```
 
-### Summary:
+# Section E: Closures, Scope & Higher-Order Functions in JavaScript (Vital for React)
 
-- Async programming keeps apps responsive.
-- Promises and async/await are the modern approach.
-- React uses async code heavily for API calls and effects.
-- Always handle errors and loading states for good UX.
+### 1. Scope: Where variables live
+
+- Global scope: Variables accessible everywhere.
+- Function scope: Variables declared inside functions are local to that function.
+- Block scope: Variables declared with let or const inside {} are local to that block.
+
+```
+let x = 10; // global scope
+
+function foo() {
+  let y = 20; // function scope
+  if (true) {
+    let z = 30; // block scope
+  }
+  // z is NOT accessible here
+}
+```
+
+### 2. Closures: Functions remembering their environment
+
+- A **closure** is a function that “remembers” the variables from where it was created, even if called later.
+
+```
+function outer() {
+  let count = 0;
+  return function inner() {
+    count++;
+    console.log(count);
+  };
+}
+
+const counter = outer();
+counter(); // 1
+counter(); // 2
+counter(); // 3
+```
+
+Closures allow React hooks like useState and useEffect to capture values across renders.
+
+### 3. Higher-Order Functions (HOF): Functions taking or returning functions
+
+- HOFs are functions that either accept other functions as arguments or return them.
+- Array methods like .map(), .filter() take functions as arguments — they’re HOFs.
+- We can write your own:
+
+```
+function greetMaker(greeting) {
+  return function(name) {
+    console.log(`${greeting}, ${name}!`);
+  };
+}
+
+const sayHello = greetMaker('Hello');
+sayHello('Alice'); // Hello, Alice!
+```
+
+- React components themselves can be HOFs — e.g., higher-order components (HOCs) that wrap other components.
+
+### 4. Using Closures in React
+
+Closures come handy in event handlers and hooks to “remember” state or props.
+
+```
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setTimeout(() => {
+      // Closure remembers 'count' at time of creation
+      alert(`Count is: ${count}`);
+    }, 1000);
+  }
+
+  return <button onClick={handleClick}>Show Count</button>;
+}
+```
+
+### 5. Arrow Functions and this Binding
+
+- Arrow functions don’t have their own this, they inherit from their parent scope — useful to avoid _.bind(this)_ in React class components.
