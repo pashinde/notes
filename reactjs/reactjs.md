@@ -1006,3 +1006,160 @@ setUser(prevUser => ({ ...prevUser, name: 'Alice' }));
 ```
 
 _Note_: Updating nested objects requires careful use of spread/rest syntax.
+
+# Section I: Deep Dive — React Props vs State
+
+### 1. Why This Matters
+
+You might have already seen:
+
+- **Props** = external, passed into a component
+- **State** = internal, owned by a component
+
+  But to master React, you need to understand:
+
+- When to use each
+- How they affect component design
+- How they impact re-rendering
+- Common pitfalls and best practices
+
+### 2. Quick Recap: Definitions
+
+| Concept           | Meaning                                                                                |
+| :---------------- | :------------------------------------------------------------------------------------- |
+| Props             | Data passed from a parent component to a child component                               |
+| State             | Data that is managed within the component itself                                       |
+| Mutability        | Props are immutable (read-only), state is mutable (updatable via setState or useState) |
+| Ownership         | Props belong to parent, state belongs to the component itself                          |
+| Re-render trigger | Props change when parent re-renders, state change triggers self re-render              |
+
+### 3. Understanding Through Analogy
+
+Imagine components as functions in math:
+
+```
+function Square({ side }) {
+  return side * side;
+}
+```
+
+- The input side is like props — the caller gives them.
+- But if the function keeps internal data (like how many times it was called), that’s like state.
+
+### 4. When to Use Props vs State
+
+Use **Props** when:
+
+- You want to pass **data from parent to child**
+- The component doesn’t need to modify the data
+- You want to **reuse** the same component with different data
+
+```
+  function Greeting({ name }) {
+    return <h1>Hello, {name}!</h1>;
+  }
+```
+
+Use **State** when:
+
+- The component needs to **remember or update data**
+- Data **changes based on user actions**, API calls, etc.
+- You need to trigger **re-renders** on data change
+
+```
+  function Counter() {
+    const [count, setCount] = useState(0);
+    return <button onClick={() => setCount(count + 1)}>Count: {count}</button>;
+  }
+```
+
+### 5. Real-World Example: Todo App
+
+Step 1: App (Parent) holds a list of todos in state
+
+```
+function App() {
+  const [todos, setTodos] = useState([
+    { id: 1, text: 'Learn React', completed: false },
+    { id: 2, text: 'Build a project', completed: true },
+  ]);
+
+  return (
+    <div>
+      {todos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </div>
+  );
+}
+```
+
+Step 2: TodoItem receives each todo via props
+
+```
+function TodoItem({ todo }) {
+  return <li>{todo.text} — {todo.completed ? 'Done' : 'Not done'}</li>;
+}
+```
+
+- ✅ Props used to display data.
+- ❌ Don’t update todo inside TodoItem — it’s a prop.
+
+### 6. Combining Props + State
+
+It’s very common to receive data via props and then maintain some local state based on it.
+
+```
+function Toggle({ initial }) {
+  const [isOn, setIsOn] = useState(initial); // initial value from prop
+
+  return (
+    <button onClick={() => setIsOn(prev => !prev)}>
+      {isOn ? 'ON' : 'OFF'}
+    </button>
+  );
+}
+```
+
+🧠 **Best Practice:**
+
+- Use props to pass initial values, not to control updates unless using controlled components.
+
+### 7. 🚨 Common Mistakes & How to Avoid Them
+
+| Mistake                          | Why it's bad                       | How to fix                    |
+| :------------------------------- | :--------------------------------- | ----------------------------- |
+| Modifying props inside child     | Violates React's one-way data flow | Use callback to notify parent |
+| Using state where props suffice  | Makes component harder to reuse    | Keep it stateless if possible |
+| Not using state for dynamic data | UI won't update                    | Use useState or useReducer    |
+
+### 8. Prop Drilling vs Lifting State
+
+- Prop Drilling: Passing props through many layers of components.
+- Lifting State Up: Moving state to a common ancestor to share between components.
+
+Example:
+
+```
+function App() {
+  const [value, setValue] = useState('');
+
+  return (
+    <div>
+      <Input value={value} onChange={setValue} />
+      <Display value={value} />
+    </div>
+  );
+}
+
+function Input({ value, onChange }) {
+  return <input value={value} onChange={e => onChange(e.target.value)} />;
+}
+
+function Display({ value }) {
+  return <p>You typed: {value}</p>;
+}
+```
+
+- **State is lifted** to App
+- **Props are passed down** to children

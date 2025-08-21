@@ -78,3 +78,13 @@ const users = [
 3. Create a component that fetches data on mount using useEffect.
 4. Explain what happens if you don’t provide the dependency array in useEffect.
 5. Convert a class component with state and lifecycle methods into a functional component using hooks.
+
+## Section I: Deep Dive — React Props vs State
+
+1. Create a ProfileCard component that receives name, age, and bio as props and displays them.
+2. Create a Toggle button that maintains its on/off state internally.
+3. Build a TodoList component that:
+   - Accepts initial todos via props
+   - Allows adding new todos using local state
+4. Refactor the above to lift the state to a parent component and pass data + handlers as props.
+5. Explain what happens when you modify a prop inside a component and how React handles it.
