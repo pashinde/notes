@@ -731,3 +731,135 @@ function Form() {
   );
 }
 ```
+
+# Section G: React Components & Props — The Heart of React
+
+### 1. What is a React Component?
+
+- A component is a reusable piece of UI, like a JavaScript function or class that returns JSX (HTML-like syntax).
+- Components let you split the UI into independent, reusable pieces.
+
+### 2. Types of Components
+
+Functional Components (Modern, recommended)
+
+```
+function Welcome(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+```
+
+or using ES6 arrow function:
+
+```
+const Welcome = (props) => <h1>Hello, {props.name}!</h1>;
+```
+
+Class Components (Legacy, less used now)
+
+```
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+```
+
+### 3. JSX — How Components Return UI
+
+- Components return JSX, which looks like HTML but is actually JavaScript.
+- JSX lets you write UI declaratively.
+
+```
+const element = <h1>Hello, world!</h1>;
+```
+
+### 4. What are Props?
+
+- **Props** (short for “properties”) are inputs to components.
+- Props are _read-only_ and passed from parent to child.
+- They allow you to customize components.
+
+```
+function Greeting(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+
+<Greeting name="Alice" />
+```
+
+### 5. Passing Props
+
+- Props are passed like attributes in JSX.
+- Props can be any data type: string, number, boolean, function, object, array.
+
+```
+<MyComponent
+  title="My Title"
+  count={10}
+  isActive={true}
+  onClick={() => alert('Clicked!')}
+/>
+```
+
+### 6. Accessing Props in Functional Components
+
+```
+function User(props) {
+  return (
+    <div>
+      <h2>{props.name}</h2>
+      <p>Age: {props.age}</p>
+    </div>
+  );
+}
+```
+
+You can use destructuring for cleaner code:
+
+```
+function User({ name, age }) {
+  return (
+    <div>
+      <h2>{name}</h2>
+      <p>Age: {age}</p>
+    </div>
+  );
+}
+```
+
+### 7. Props are Read-Only
+
+- You should never modify props inside a component.
+- If you need to change data, use state.
+
+### 8. Default Props & PropTypes (Basic Validation)
+
+- You can set default props so your component has fallback values.
+
+```
+function Button({ text }) {
+  return <button>{text}</button>;
+}
+
+Button.defaultProps = {
+  text: 'Click me',
+};
+```
+
+- You can also use PropTypes package to validate props (good for bigger apps).
+
+### 9. Nesting Components
+
+- Components can be nested to build complex UIs.
+
+```
+function App() {
+  return (
+    <div>
+      <Greeting name="Alice" />
+      <Greeting name="Bob" />
+    </div>
+  );
+}
+```

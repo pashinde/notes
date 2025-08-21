@@ -62,3 +62,11 @@ const users = [
 3. Create a form that prevents the default submit and logs form data.
 4. Create a list of buttons dynamically and handle clicks for each button with its index.
 5. Use arrow functions to avoid explicit .bind() in a class component event handler.
+
+## Section G: React Components & Props — The Heart of React
+
+1. Create a functional component UserCard that takes name, age, and email as props and displays them.
+2. Use destructuring to clean up props in your component.
+3. Pass an array of user objects and map over it to render multiple UserCard components.
+4. Set default props for your component.
+5. Try to modify props inside a component and observe why it’s a bad idea.
