@@ -622,3 +622,112 @@ function Counter() {
 ### 5. Arrow Functions and this Binding
 
 - Arrow functions don’t have their own this, they inherit from their parent scope — useful to avoid _.bind(this)_ in React class components.
+
+# Section F: Event Handling & Synthetic Events in React
+
+### 1. What is Event Handling in React?
+
+- React uses a system called Synthetic Events, which is a cross-browser wrapper around native browser events.
+- This system makes event handling consistent across browsers.
+- React events are named using camelCase, e.g., onClick, onChange, not lowercase like HTML.
+
+### 2. How to handle events in React?
+
+- Pass a function as the event handler in JSX.
+- Unlike HTML, you pass a function, not a string.
+
+```
+function Button() {
+  function handleClick() {
+    alert('Button clicked!');
+  }
+
+  return <button onClick={handleClick}>Click me</button>;
+}
+```
+
+### 3. Event object in React
+
+- Event handlers receive a SyntheticEvent object.
+- It wraps the native event and works identically across all browsers.
+
+```
+function Input() {
+  function handleChange(event) {
+    console.log(event.target.value);
+  }
+
+  return <input onChange={handleChange} />;
+}
+```
+
+### 4. Binding this in Class Components (Legacy)
+
+- In React class components, you often bind event handlers in the constructor to keep _this_ context.
+
+```
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    alert(this.props.message);
+  }
+
+  render() {
+    return <button onClick={this.handleClick}>Click me</button>;
+  }
+}
+```
+
+- Alternatively, use arrow functions to avoid binding:
+
+```
+handleClick = () => {
+  alert(this.props.message);
+};
+```
+
+### 5. Passing Arguments to Event Handlers
+
+```
+function Button({ id }) {
+  function handleClick(id, event) {
+    console.log('Clicked button:', id);
+  }
+
+  return <button onClick={e => handleClick(id, e)}>Click me</button>;
+}
+```
+
+### 6. Common React Events
+
+| Event            | Usage                  |
+| :--------------- | :--------------------- |
+| onClick          | Mouse click            |
+| onChange         | Input or select change |
+| onSubmit         | Form submission        |
+| onMouseEnter     | Mouse hover            |
+| onKeyDown        | Keyboard key press     |
+| onFocus / onBlur | Input focus/blur       |
+
+### 7. Preventing Default Behavior
+
+Use event.preventDefault() to stop default form submit or link navigation.
+
+```
+function Form() {
+  function handleSubmit(event) {
+    event.preventDefault();
+    alert('Form submitted!');
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```

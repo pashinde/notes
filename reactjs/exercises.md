@@ -54,3 +54,11 @@ const users = [
 3. Use an array’s .map() method to transform an array of numbers into their squares.
 4. Explain what happens with closures in the React useEffect hook with a dependency array.
 5. Write a React function component demonstrating a closure in an event handler.
+
+## Section F: Event Handling & Synthetic Events in React
+
+1. Create a button that alerts a custom message on click.
+2. Create an input that logs its value on every change.
+3. Create a form that prevents the default submit and logs form data.
+4. Create a list of buttons dynamically and handle clicks for each button with its index.
+5. Use arrow functions to avoid explicit .bind() in a class component event handler.
