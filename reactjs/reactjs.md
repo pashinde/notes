@@ -863,3 +863,146 @@ function App() {
   );
 }
 ```
+
+# Section H: React State & Lifecycle — Making Components Interactive
+
+### 1. What is State in React?
+
+- **State** is a special object that holds data that can change over time.
+- Unlike **props**, state is **managed inside** the component.
+- When state changes, React **re-renders** the component to update the UI.
+
+### 2. State vs Props — Quick Recap
+
+| Aspect      | Props               | State                    |
+| :---------- | :------------------ | :----------------------- |
+| Data source | Passed from parent  | Managed inside component |
+| Mutability  | Read-only           | Mutable                  |
+| Purpose     | Configure component | Track component data     |
+| Update By   | parent              | By the component itself  |
+
+### 3. Adding State in Functional Components — useState Hook
+
+In modern React, **hooks** are used to manage state in functional components.
+
+```
+import React, { useState } from 'react';
+
+function Counter() {
+  // Declare a state variable "count" with initial value 0
+  const [count, setCount] = useState(0);
+
+  // Function to update the state
+  function increment() {
+    setCount(count + 1);
+  }
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={increment}>Increase</button>
+    </div>
+  );
+}
+```
+
+- useState returns an **array**: [stateVariable, setterFunction].
+- Call setCount(newValue) to update state — this triggers re-render.
+
+### 4. Rules of Using useState
+
+- Only call hooks at the top level of your component or custom hooks.
+- Don’t call hooks inside loops, conditions, or nested functions.
+- Hooks must be called in the same order on every render.
+
+### 5. State Updates are Asynchronous and Batched
+
+- React batches multiple state updates for performance.
+- You can pass a function to the setter to get the latest state value.
+
+```
+setCount(prevCount => prevCount + 1);
+```
+
+This is important when updating state based on previous state.
+
+### 6. Lifecycle in React Functional Components — useEffect
+
+- React functional components don’t have lifecycle methods like classes.
+- Instead, they use the useEffect hook to perform side effects (data fetching, subscriptions, manual DOM updates).
+
+```
+import React, { useState, useEffect } from 'react';
+
+function Timer() {
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSeconds(prev => prev + 1);
+    }, 1000);
+
+    // Cleanup function runs when component unmounts or before effect runs again
+    return () => clearInterval(intervalId);
+  }, []); // Empty dependency array means effect runs once after first render
+
+  return <div>Seconds: {seconds}</div>;
+}
+```
+
+- useEffect runs after rendering.
+- The cleanup function (returned from effect) runs before the component unmounts or before running the effect again.
+- The dependency array controls when the effect runs.
+
+### 7. Lifecycle in Class Components (Brief)
+
+- Mounting: constructor → render → componentDidMount
+- Updating: render → componentDidUpdate
+- Unmounting: componentWillUnmount
+
+Example (less used now):
+
+```
+class Timer extends React.Component {
+  state = { seconds: 0 };
+
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      this.setState(prev => ({ seconds: prev.seconds + 1 }));
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  render() {
+    return <div>Seconds: {this.state.seconds}</div>;
+  }
+}
+```
+
+### 8. Why Prefer Functional Components & Hooks?
+
+- Simpler and more readable.
+- No this keyword confusion.
+- Easier to reuse logic with custom hook-
+
+### 9. Common State Patterns
+
+- Multiple state variables:
+
+```
+const [name, setName] = useState('');
+const [age, setAge] = useState(0);
+```
+
+- Single object state:
+
+```
+const [user, setUser] = useState({ name: '', age: 0 });
+
+setUser(prevUser => ({ ...prevUser, name: 'Alice' }));
+```
+
+_Note_: Updating nested objects requires careful use of spread/rest syntax.

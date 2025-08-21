@@ -70,3 +70,11 @@ const users = [
 3. Pass an array of user objects and map over it to render multiple UserCard components.
 4. Set default props for your component.
 5. Try to modify props inside a component and observe why it’s a bad idea.
+
+## Section H: React State & Lifecycle — Making Components Interactive
+
+1. Build a counter component that increments and decrements.
+2. Build a todo list that adds and removes tasks using state.
+3. Create a component that fetches data on mount using useEffect.
+4. Explain what happens if you don’t provide the dependency array in useEffect.
+5. Convert a class component with state and lifecycle methods into a functional component using hooks.
