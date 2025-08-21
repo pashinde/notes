@@ -37,3 +37,12 @@ const users = [
 - Use filter to get users older than 28.
 - Use find to get the user with id 2.
 - Use reduce to find the sum of all ages.
+
+## Section D: JavaScript Asynchronous Programming for React
+
+1. Create a Promise that resolves with your name after 2 seconds.
+2. Convert a callback-based function to use Promises.
+3. Use async/await to fetch data from an API and log the result.
+4. Handle errors gracefully in your async function.
+5. Use Promise.all to fetch two resources simultaneously and log both results.
+6. Try to implement a React component that fetches and displays data with loading and error states.

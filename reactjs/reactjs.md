@@ -398,3 +398,151 @@ const newArr = [...arr, 4]; // add 4 immutably
 const str = "ReactJS";
 console.log(str.includes('JS')); // true
 ```
+
+# Section D: JavaScript Asynchronous Programming for React
+
+### 1. What is Asynchronous Programming?
+
+- Normally, JS executes code synchronously: one line at a time, blocking until the task completes.
+- **Asynchronous** allows JS to start a task (like fetching data) and continue running other code while waiting for that task to finish.
+- This prevents the UI from freezing while waiting.
+
+### 2. Callbacks — The Old School Way
+
+Functions passed as arguments to be called later.
+
+```
+function fetchData(callback) {
+  setTimeout(() => {
+    callback('Data received!');
+  }, 1000);
+}
+
+fetchData(data => console.log(data)); // prints after 1 second
+```
+
+**Problem**: Callback Hell — nested callbacks become messy.
+
+### 3. Promises — Cleaner Async Handling
+
+- A Promise is an object representing a task that may complete in the future.
+- States: pending → fulfilled (success) or rejected (error).
+
+```
+const fetchData = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('Data received!');
+    // or reject('Error occurred!');
+  }, 1000);
+});
+
+fetchData
+  .then(data => console.log(data)) // success
+  .catch(error => console.error(error)); // error
+```
+
+### 4. Async/Await — Syntactic Sugar for Promises
+
+- Makes async code look synchronous.
+- Use async before a function and await before a Promise.
+
+```
+async function getData() {
+  try {
+    const data = await fetchData;
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+getData();
+```
+
+### 5. Fetch API — Real-life Data Fetching
+
+- Browser API for network requests, returns a Promise.
+
+```
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+  .then(response => response.json()) // parse JSON body
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+With async/await:
+
+```
+async function getPost() {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+getPost();
+```
+
+### 6. Handling Multiple Promises
+
+- Promise.all waits for multiple promises to finish.
+
+```
+const p1 = Promise.resolve(3);
+const p2 = 42;
+const p3 = new Promise(resolve => setTimeout(resolve, 100, 'foo'));
+
+Promise.all([p1, p2, p3]).then(values => {
+  console.log(values); // [3, 42, "foo"]
+});
+```
+
+### 7. React and Asynchronous Code
+
+- Fetch data inside React lifecycle or hooks (useEffect).
+- Use async/await to handle API calls cleanly.
+- Manage loading and error states in components.
+  Example React snippet:
+
+```
+import React, { useState, useEffect } from 'react';
+
+function User() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setUser(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUser();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return <div>{user && <h1>{user.name}</h1>}</div>;
+}
+
+export default User;
+```
+
+### Summary:
+
+- Async programming keeps apps responsive.
+- Promises and async/await are the modern approach.
+- React uses async code heavily for API calls and effects.
+- Always handle errors and loading states for good UX.
