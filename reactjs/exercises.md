@@ -1,6 +1,6 @@
 # Exercises:
 
-## Exercises for Javascript Basics
+## Section A: Exercises for Javascript Basics
 
 1. Declare variables for your name, age, and hobbies (array).
 2. Write a function that greets you with your name.
@@ -10,3 +10,13 @@
 6. Write a function that sums any number of arguments.
 7. Use map to create an array of greetings for each hobby.
 8. Use a ternary to display if you are an adult.
+
+## Section B: Modern JavaScript (ES6+) Features for React
+
+1. Rewrite a normal function to an arrow function.
+2. Use destructuring to extract deeply nested properties from an object.
+3. Combine two arrays using spread operator.
+4. Create a class for a Car with methods for start and stop.
+5. Write a simple module to export a function and import it in another file.
+6. Create a promise that resolves after 2 seconds and use async/await to get its result.
+7. Use optional chaining to safely access nested properties in an object.
