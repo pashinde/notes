@@ -20,3 +20,20 @@
 5. Write a simple module to export a function and import it in another file.
 6. Create a promise that resolves after 2 seconds and use async/await to get its result.
 7. Use optional chaining to safely access nested properties in an object.
+
+## Section C: JavaScript Data Structures & Methods Crucial for React
+
+Given an array of user objects:
+
+```
+const users = [
+  { id: 1, name: 'Alice', age: 30 },
+  { id: 2, name: 'Bob', age: 25 },
+  { id: 3, name: 'Carol', age: 35 },
+];
+```
+
+- Use map to create an array of user names.
+- Use filter to get users older than 28.
+- Use find to get the user with id 2.
+- Use reduce to find the sum of all ages.

@@ -301,3 +301,100 @@ getData();
 const user = { name: 'Alice', address: null };
 console.log(user.address?.city); // undefined (no error)
 ```
+
+# Section C: JavaScript Data Structures & Methods Crucial for React
+
+### 1. Arrays — The Backbone of Rendering Lists in React
+
+React apps display lists a lot — from menus to dynamic content. Understanding array methods is critical.
+
+Key methods:
+
+- **map()** — transforms each item into something else (often JSX)
+
+```
+const numbers = [1, 2, 3];
+const doubled = numbers.map(n => n * 2); // [2, 4, 6]
+
+const listItems = numbers.map(num => <li key={num}>{num}</li>);
+```
+
+- **filter()** — select items that match a condition
+
+```
+const even = numbers.filter(n => n % 2 === 0); // [2]
+```
+
+- **find()** — find first item that matches condition
+
+```
+const firstEven = numbers.find(n => n % 2 === 0); // 2
+```
+
+- **reduce()** — reduce array to a single value (sum, product, etc.)
+
+```
+const sum = numbers.reduce((acc, curr) => acc + curr, 0); // 6
+```
+
+### 2. Objects — Passing Props and Managing State
+
+Objects represent structured data. React props and state are often objects.
+Accessing and updating:
+
+```
+const person = { name: 'Alice', age: 25 };
+console.log(person.name); // Alice
+
+const updatedPerson = { ...person, age: 26 }; // create new object with updated age
+```
+
+### 3. Sets — Unique collections (React uses for unique IDs or caching)
+
+```
+const fruits = new Set(['apple', 'banana', 'apple']);
+console.log(fruits); // Set { 'apple', 'banana' }
+```
+
+### 4. Maps — Key-value pairs, keys can be any datatype
+
+```
+const map = new Map();
+map.set('name', 'Alice');
+map.set(1, 'one');
+console.log(map.get('name')); // Alice
+```
+
+### 5. Array & Object Destructuring — Clean data access
+
+```
+const user = { id: 1, name: 'Alice', age: 30 };
+const { name, age } = user;
+
+const arr = [10, 20, 30];
+const [first, second] = arr;
+```
+
+### 6. Array Mutation vs Immutability
+
+- React expects state updates to be immutable.
+- Instead of modifying arrays or objects directly, create new copies.
+
+```
+const arr = [1, 2, 3];
+const newArr = [...arr, 4]; // add 4 immutably
+```
+
+### 7. Common Array Methods in React State Updates
+
+- concat(), slice(), filter() to return new arrays.
+- Avoid push(), pop(), splice() on state arrays (they mutate)
+
+### 8. Important String Methods
+
+- includes(), startsWith(), endsWith() — often used for filtering.
+
+```
+const str = "ReactJS";
+console.log(str.includes('JS')); // true
+```
