@@ -1163,3 +1163,213 @@ function Display({ value }) {
 
 - **State is lifted** to App
 - **Props are passed down** to children
+
+# Section J: All About React Hooks
+
+React Hooks let you use state and lifecycle features in functional components — no need for class components anymore!
+
+## 📌 What Are Hooks?
+
+Hooks are special functions that:
+
+- Let you “hook into” React features like state and lifecycle
+- Only work in functional components
+- Start with the word "use"
+
+### 1. useState – Add state to a functional component
+
+```
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0); // [value, setter]
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+1</button>
+    </div>
+  );
+}
+```
+
+✔️ Used for local, reactive state.
+
+### 2. useEffect – Side effects (data fetching, subscriptions, etc.)
+
+```
+import React, { useEffect, useState } from 'react';
+
+function DataFetcher() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    fetch('https://api.example.com/data')
+      .then(res => res.json())
+      .then(setData);
+  }, []); // [] means run only once (on mount)
+
+  return <div>{data ? JSON.stringify(data) : 'Loading...'}</div>;
+}
+```
+
+✔️ Runs after render
+
+✔️ Include dependencies in the array to control re-running
+
+✔️ Use it for:
+
+- Fetching data
+- Setting timers
+- Subscribing to events
+
+### 3. useRef – Hold mutable value across renders OR access DOM
+
+Example 1: Store a timer ID
+
+```
+const timerRef = useRef(null);
+```
+
+Example 2: Focus input on mount
+
+```
+function InputFocus() {
+  const inputRef = useRef();
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  return <input ref={inputRef} />;
+}
+```
+
+✔️ Does not cause re-render
+
+✔️ Can be used like instance variables or DOM refs
+
+## ✨ Less Common but Powerful Hooks
+
+### 4. useContext – Consume context values
+
+```
+const ThemeContext = React.createContext();
+
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <ThemedComponent />
+    </ThemeContext.Provider>
+  );
+}
+
+function ThemedComponent() {
+  const theme = useContext(ThemeContext);
+  return <p>Current theme: {theme}</p>;
+}
+```
+
+✔️ Avoids prop drilling
+
+✔️ Works with React Context API
+
+### 5. useReducer – Alternative to useState for complex logic
+
+```
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    default:
+      return state;
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 });
+
+  return (
+    <button onClick={() => dispatch({ type: 'increment' })}>
+      Count: {state.count}
+    </button>
+  );
+}
+```
+
+✔️ Use for:
+
+- Complex state logic
+- Multiple related state variables
+- Redux-like architecture
+
+### 6. useMemo – Memoize a calculated value
+
+```
+const expensiveValue = useMemo(() => {
+  return computeHeavyStuff(input);
+}, [input]);
+```
+
+✔️ Avoids recalculating expensive values unnecessarily
+
+### 7. useCallback – Memoize a function
+
+```
+const handleClick = useCallback(() => {
+  doSomething();
+}, []);
+```
+
+✔️ Prevents re-creating functions every render
+
+✔️ Great for optimizing child components
+
+### 8. useLayoutEffect – Like useEffect, but fires before painting to screen
+
+Used for measurements or DOM manipulation:
+
+```
+useLayoutEffect(() => {
+  // Read DOM, do layout logic here
+}, []);
+```
+
+✔️ Runs synchronously after render, before paint
+
+❗ Use only when necessary (can block UI)
+
+### 9. useImperativeHandle – Customize what a ref exposes (used with forwardRef)
+
+```
+useImperativeHandle(ref, () => ({
+  focus: () => {
+    inputRef.current.focus();
+  },
+}));
+```
+
+✔️ For library authors or advanced scenarios
+
+### 10. useDebugValue – Show custom label in React DevTools
+
+```
+useDebugValue(user ? 'Logged In' : 'Logged Out');
+```
+
+✔️ Dev-only hook for debugging
+
+### Hooks Usage Rules (Don’t Break These!)
+
+1. Only call Hooks **at the top level** of your component (no conditionals or loops).
+2. Only call Hooks from **React functions** (components or custom hooks).
+
+### 11. Hooks Best Practices
+
+| Best Practice                                                 | Why                                             |
+| :------------------------------------------------------------ | :---------------------------------------------- |
+| Use useEffect with proper dependency array                    | Prevents bugs from stale data or infinite loops |
+| Use useRef for non-stateful mutable values                    | Avoids unnecessary re-renders                   |
+| Split state into multiple useState calls if unrelated         | Keeps code clean                                |
+| Use useReducer when state logic is complex                    | Better organization                             |
+| Memoize expensive values/functions with useMemo / useCallback | Improves performance                            |

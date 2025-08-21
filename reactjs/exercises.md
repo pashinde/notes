@@ -88,3 +88,13 @@ const users = [
    - Allows adding new todos using local state
 4. Refactor the above to lift the state to a parent component and pass data + handlers as props.
 5. Explain what happens when you modify a prop inside a component and how React handles it.
+
+## Section J: All About React Hooks
+
+1. Build a counter using useState.
+2. Build a timer using useEffect.
+3. Use useRef to focus an input on mount.
+4. Build a light/dark theme switcher using useContext.
+5. Build a form reducer with useReducer.
+6. Add useMemo to an expensive calculation (like factorial).
+7. Use useCallback to memoize a button click handler.
