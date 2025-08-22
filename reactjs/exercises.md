@@ -120,3 +120,9 @@ const users = [
 2. Use React Query to fetch and display data from a public API.
 3. Set up Redux Toolkit in a React app with a simple counter slice.
 4. Compare state management with useContext + useReducer vs Redux Toolkit.
+
+## Section N: React Router (with Hooks)
+
+1. Build a multi-page app with nested routes (e.g., /dashboard/settings).
+2. Use useNavigate to redirect after a login simulation.
+3. Extract multiple params and query strings with useParams and useLocation.

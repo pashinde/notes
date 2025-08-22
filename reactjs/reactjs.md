@@ -1808,3 +1808,90 @@ function Counter() {
   );
 }
 ```
+
+# Section N: React Router (with Hooks)
+
+### 1. React Router Basics
+
+React Router helps build SPAs by mapping URL paths to React components, allowing navigation without full page reloads.
+
+### 2. Key Components & Hooks
+
+| Item             | Description                                 |
+| :--------------- | :------------------------------------------ |
+| \<BrowserRouter> | Wraps your app, enables history API routing |
+| \<Routes>        | Container for all \<Route> elements         |
+| \<Route>         | Defines a path and component mapping        |
+| \<Link>          | Declarative navigation (like \<a>)          |
+| useNavigate()    | Hook for programmatic navigation            |
+| useParams()      | Hook to access dynamic URL params           |
+| useLocation()    | Hook to get current URL/location object     |
+| useMatch()       | Check if current path matches a pattern     |
+
+### 3. Example Setup
+
+```
+import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+
+function Home() {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <h1>Home Page</h1>
+      <button onClick={() => navigate('/profile/123')}>Go to Profile 123</button>
+    </div>
+  );
+}
+
+function Profile() {
+  const { userId } = useParams();
+  return <h1>Profile Page for User {userId}</h1>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/profile/123">Profile 123</Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+- useNavigate() lets you navigate programmatically (e.g., after a form submission).
+- useParams() extracts dynamic segments from the URL.
+- Use \<Link> instead of \<a> to avoid full reloads.
+- \<Routes> replaces the older \<Switch> component for route matching.
+
+### 4. Nested Routes & Layouts
+
+You can nest routes and render layouts for shared UI parts:
+
+```
+function DashboardLayout() {
+  return (
+    <div>
+      <h2>Dashboard</h2>
+      <Outlet /> {/* renders nested routes */}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardHome />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
