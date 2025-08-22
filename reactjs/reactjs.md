@@ -1480,3 +1480,174 @@ function DataDisplay() {
 | Return only what components need              | Avoid exposing unnecessary details |
 | Use other hooks inside your custom hooks      | Compose functionality cleanly      |
 | Avoid side effects outside useEffect          | Maintain predictable behavior      |
+
+# Section L: Advanced React Hooks Topics
+
+## Part 1: useReducer Patterns
+
+### 1. What is useReducer?
+
+- An alternative to useState for complex state logic.
+- Inspired by Redux’s reducer concept.
+- Helps manage multiple related state variables or state w
+  ith complex transitions.
+- Accepts a reducer function and initial state.
+- Returns [state, dispatch].
+
+### 2. Basic Example of useReducer
+
+```
+import React, { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    case 'reset':
+      return initialState;
+    default:
+      throw new Error('Unknown action');
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+    </>
+  );
+}
+```
+
+### 3. When to Use useReducer Over useState?
+
+- When state logic is complex or involves multiple sub-values.
+- When next state depends on previous state.
+- When you want to centralize state transitions.
+- When using action-based state updates is clearer.
+
+### 4. Advanced useReducer Pattern: Using Payloads
+
+```
+function reducer(state, action) {
+  switch (action.type) {
+    case 'add':
+      return { todos: [...state.todos, action.payload] };
+    case 'toggle':
+      return {
+        todos: state.todos.map(todo =>
+          todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
+        ),
+      };
+    default:
+      return state;
+  }
+}
+```
+
+You dispatch actions with:
+
+```
+dispatch({ type: 'add', payload: { id: 3, text: 'Learn useReducer', completed: false } });
+```
+
+### 5. Side Note: useReducer with useContext
+
+You can combine useReducer with React Context to manage global app state.
+
+## Part 2: Context API + Hooks (useContext)
+
+### 1. What is React Context?
+
+- A way to pass data through the component tree without props drilling.
+- Useful for global data like theme, authentication, user info.
+
+### 2. How to Use Context with Hooks
+
+#### Step 1: Create a Context
+
+```
+import React, { createContext } from 'react';
+
+const ThemeContext = createContext('light'); // default value
+```
+
+#### Step 2: Provide Context Value
+
+```
+function App() {
+  return (
+    <ThemeContext.Provider value="dark">
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+```
+
+#### Step 3: Consume Context with useContext
+
+```
+import React, { useContext } from 'react';
+
+function Toolbar() {
+  const theme = useContext(ThemeContext);
+
+  return <div style={{ background: theme === 'dark' ? '#333' : '#ccc' }}>Toolbar</div>;
+}
+```
+
+### 3. Example: Theme Toggle with Context + Hooks
+
+```
+import React, { useState, createContext, useContext } from 'react';
+
+const ThemeContext = createContext();
+
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+
+  function toggleTheme() {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  }
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+function Toolbar() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <div style={{ background: theme === 'dark' ? '#333' : '#eee', padding: 20 }}>
+      <p>Current theme: {theme}</p>
+      <button onClick={toggleTheme}>Toggle</button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <Toolbar />
+    </ThemeProvider>
+  );
+}
+```
+
+### 4. Benefits of Using Context with Hooks
+
+- Easy to share state across deeply nested components.
+- No need for prop drilling.
+- Combine well with useReducer for managing global complex state.

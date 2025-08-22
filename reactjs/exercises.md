@@ -106,3 +106,10 @@ const users = [
 3. Build usePrevious hook to get the previous value of a prop or state.
 4. Make a useDebounce hook that delays updating a value by a set time (used in search inputs).
 5. Combine useFetch and useLocalStorage to fetch data and cache it locally.
+
+## Section L: Advanced React Hooks Topics
+
+1. Implement a todo app using useReducer to manage todos (add, toggle complete, delete).
+2. Create a theme context with a toggle function using useContext and useState.
+3. Combine useReducer and useContext to manage global todo state and dispatch actions from child components.
+4. Experiment with passing multiple contexts and consuming them using hooks.
