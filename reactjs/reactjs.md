@@ -1895,3 +1895,75 @@ function App() {
   );
 }
 ```
+
+# Section O: React Query (TanStack Query)
+
+### 1. What is React Query?
+
+A library to manage **server state** like fetching, caching, syncing, and updating remote data in React apps.
+
+### 2. Why React Query?
+
+- Handles caching & background updates automatically.
+- Reduces boilerplate around fetch & state.
+- Provides **status tracking** (loading, error).
+- Supports **pagination, refetching, mutations,** and more.
+
+### 3. Basic Usage
+
+```
+import { useQuery } from '@tanstack/react-query';
+
+function fetchTodos() {
+  return fetch('https://jsonplaceholder.typicode.com/todos').then(res => res.json());
+}
+
+function TodoList() {
+  const { data, error, isLoading } = useQuery(['todos'], fetchTodos);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading todos</div>;
+
+  return (
+    <ul>
+      {data.slice(0, 10).map(todo => (
+        <li key={todo.id}>{todo.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+### 4. Mutations (POST/PUT/DELETE)
+
+```
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+function addTodo(newTodo) {
+  return fetch('https://jsonplaceholder.typicode.com/todos', {
+    method: 'POST',
+    body: JSON.stringify(newTodo),
+    headers: { 'Content-Type': 'application/json' }
+  }).then(res => res.json());
+}
+
+function AddTodo() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation(addTodo, {
+    onSuccess: () => queryClient.invalidateQueries(['todos'])
+  });
+
+  const handleAdd = () => mutation.mutate({ title: 'New Task', completed: false });
+
+  return <button onClick={handleAdd}>Add Todo</button>;
+}
+```
+
+### 5. Key Concepts
+
+| Concept        | Description                        |
+| :------------- | :--------------------------------- |
+| useQuery       | Fetch and cache data               |
+| useMutation    | Create/update/delete data          |
+| useQueryClient | Access cache & trigger refetches   |
+| Query Keys     | Unique identifiers for cached data |

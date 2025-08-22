@@ -126,3 +126,9 @@ const users = [
 1. Build a multi-page app with nested routes (e.g., /dashboard/settings).
 2. Use useNavigate to redirect after a login simulation.
 3. Extract multiple params and query strings with useParams and useLocation.
+
+## Section O: React Query (TanStack Query)
+
+1. Fetch and display paginated API data with React Query.
+2. Implement add/delete functionality with useMutation.
+3. Use query invalidation to update UI after mutations.
