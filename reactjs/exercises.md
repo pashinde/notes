@@ -113,3 +113,10 @@ const users = [
 2. Create a theme context with a toggle function using useContext and useState.
 3. Combine useReducer and useContext to manage global todo state and dispatch actions from child components.
 4. Experiment with passing multiple contexts and consuming them using hooks.
+
+## Section M: React Router with Hooks, React Query, and State Management Libraries
+
+1. Build a small app with React Router using useNavigate and useParams.
+2. Use React Query to fetch and display data from a public API.
+3. Set up Redux Toolkit in a React app with a simple counter slice.
+4. Compare state management with useContext + useReducer vs Redux Toolkit.

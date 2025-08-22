@@ -1651,3 +1651,160 @@ function App() {
 - Easy to share state across deeply nested components.
 - No need for prop drilling.
 - Combine well with useReducer for managing global complex state.
+
+# Section M: React Router with Hooks, React Query, and State Management Libraries
+
+## React Router with Hooks
+
+### 1. What is React Router?
+
+- The standard library for routing in React apps.
+- Helps build Single Page Applications (SPA) with navigation between views.
+- Manages URL changes and renders components accordingly.
+
+### 2. React Router Hooks Overview
+
+- useNavigate() – programmatic navigation.
+- useParams() – access URL parameters.
+- useLocation() – access current URL info.
+- useMatch() – check if current URL matches a pattern.
+
+### 3. Example: Simple Router Setup with Hooks
+
+```
+import { BrowserRouter, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+
+function Home() {
+  const navigate = useNavigate();
+  return (
+    <div>
+      <h2>Home</h2>
+      <button onClick={() => navigate('/profile/42')}>Go to Profile 42</button>
+    </div>
+  );
+}
+
+function Profile() {
+  const { userId } = useParams();
+  return <h2>Profile of User {userId}</h2>;
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <nav>
+        <Link to="/">Home</Link> | <Link to="/profile/1">Profile 1</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+### 4. Why Use React Router Hooks?
+
+- Cleaner, simpler code than older HOCs or render props.
+- More intuitive API inside functional components.
+- Direct access to navigation & route params.
+
+## React Query (now called TanStack Query)
+
+### 1. What is React Query?
+
+- A library to fetch, cache, and update asynchronous data in React apps.
+- Simplifies server state management.
+- Provides features like:
+  - Caching
+  - Refetching
+  - Background updates
+  - Pagination support
+  - Request cancellation
+
+### 2. Basic Example of React Query
+
+```
+import { useQuery } from '@tanstack/react-query';
+
+function fetchUser(userId) {
+  return fetch(`https://api.example.com/users/${userId}`).then(res => res.json());
+}
+
+function User({ userId }) {
+  const { data, error, isLoading } = useQuery(['user', userId], () => fetchUser(userId));
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading user</p>;
+
+  return <div>{data.name}</div>;
+}
+```
+
+### 3. Why Use React Query?
+
+- Less boilerplate code compared to manual useEffect data fetching.
+- Automatically manages cache and updates UI.
+- Supports polling, pagination, optimistic updates.
+
+## State Management Libraries
+
+### 1. Why use external state management?
+
+- React’s built-in state & context work well, but large apps may need:
+  - Global shared state
+  - Predictable state transitions
+  - Better debugging tools
+
+### 2. Popular State Libraries
+
+| Library       | Description                     | Use Case                             |
+| :------------ | :------------------------------ | :----------------------------------- |
+| Redux         | Predictable state container     | Large apps, complex state logic      |
+| Redux Toolkit | Simplifies Redux boilerplate    | Modern Redux with better DX          |
+| Recoil        | React-centric state management  | Fine-grained state with minimal code |
+| Zustand       | Small, fast, and scalable state | Lightweight global state             |
+| MobX          | Observable state and reactions  | Reactive state with simple setup     |
+
+### 3. Example: Redux Toolkit Slice
+
+```
+// counterSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment(state) {
+      state.value++;
+    },
+    decrement(state) {
+      state.value--;
+    }
+  }
+});
+
+export const { increment, decrement } = counterSlice.actions;
+export default counterSlice.reducer;
+
+// Counter.js
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from './counterSlice';
+
+function Counter() {
+  const count = useSelector(state => state.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <p>Count: {count}</p>
+      <button onClick={() => dispatch(increment())}>+</button>
+      <button onClick={() => dispatch(decrement())}>-</button>
+    </>
+  );
+}
+```
