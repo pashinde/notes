@@ -138,3 +138,9 @@ const users = [
 1. Build a todo app with Redux Toolkit and add async API calls.
 2. Add loading and error states for async actions.
 3. Explore Redux DevTools for debugging.
+
+## Section Q: React Hook Form
+
+1. Build a form with validation for required fields.
+2. Integrate form submission with API.
+3. Use form-level and field-level validation.

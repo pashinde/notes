@@ -2070,3 +2070,44 @@ const userSlice = createSlice({
   }
 });
 ```
+
+# Section Q: React Hook Form
+
+### 1. What is React Hook Form?
+
+- Library to handle forms in React with minimal re-rendering.
+- Works well with React Hooks and integrates with validation libraries.
+- Provides register, handleSubmit, errors, etc.
+
+### 2. Basic Usage
+
+```
+import { useForm } from 'react-hook-form';
+
+function LoginForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const onSubmit = data => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('username', { required: 'Username is required' })} />
+      {errors.username && <p>{errors.username.message}</p>}
+
+      <input type="password" {...register('password', { minLength: 6 })} />
+      {errors.password && <p>Password must be at least 6 characters</p>}
+
+      <button type="submit">Login</button>
+    </form>
+  );
+}
+```
+
+### 3. Features
+
+- Built-in validation support.
+- Minimal re-renders for performance.
+- Easy integration with UI libraries.
+- Supports controlled and uncontrolled components.
