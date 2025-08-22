@@ -1373,3 +1373,110 @@ useDebugValue(user ? 'Logged In' : 'Logged Out');
 | Split state into multiple useState calls if unrelated         | Keeps code clean                                |
 | Use useReducer when state logic is complex                    | Better organization                             |
 | Memoize expensive values/functions with useMemo / useCallback | Improves performance                            |
+
+# Section K: Deep Dive into Custom Hooks in React
+
+### 1. What are Custom Hooks?
+
+- Custom hooks are JavaScript functions whose name starts with use.
+- They let you extract and reuse stateful logic across multiple components.
+- They can call other hooks inside them.
+- They follow the same rules of hooks (top-level calls, etc.).
+
+### 2. Why Use Custom Hooks?
+
+- Avoid code duplication when multiple components share logic.
+- Make components cleaner by moving logic outside JSX.
+- Enhance readability and maintainability.
+- Encapsulate complex behavior into reusable functions.
+
+### 3. How to Create a Custom Hook?
+
+1. The function name must start with use.
+2. Inside, use built-in hooks like useState, useEffect, etc.
+3. Return values or functions needed by the component.
+
+### Example 1: useWindowWidth — Track Window Width
+
+```
+import { useState, useEffect } from 'react';
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup listener on unmount
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  return width;
+}
+
+// Usage in a component:
+function ShowWidth() {
+  const width = useWindowWidth();
+
+  return <div>Window width: {width}px</div>;
+}
+```
+
+### Example 2: useFetch — Data Fetching Hook
+
+```
+import { useState, useEffect } from 'react';
+
+function useFetch(url) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error('Network error');
+        return res.json();
+      })
+      .then(json => {
+        setData(json);
+        setError(null);
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [url]);
+
+  return { data, loading, error };
+}
+
+// Usage:
+function DataDisplay() {
+  const { data, loading, error } = useFetch('https://api.example.com/data');
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+}
+```
+
+### How to Think About Custom Hooks
+
+- They are not components — do not return JSX.
+- They return values or functions that components can use.
+- They enable sharing logic, not UI.
+
+### Custom Hook Best Practices
+
+| Best Practice                                 | Why                                |
+| :-------------------------------------------- | :--------------------------------- |
+| Name your hooks starting with use             | To follow React’s conventions      |
+| Keep hooks focused on a single responsibility | Easier to maintain and reuse       |
+| Return only what components need              | Avoid exposing unnecessary details |
+| Use other hooks inside your custom hooks      | Compose functionality cleanly      |
+| Avoid side effects outside useEffect          | Maintain predictable behavior      |

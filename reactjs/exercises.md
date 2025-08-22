@@ -98,3 +98,11 @@ const users = [
 5. Build a form reducer with useReducer.
 6. Add useMemo to an expensive calculation (like factorial).
 7. Use useCallback to memoize a button click handler.
+
+## Section K: Deep Dive into Custom Hooks in React
+
+1. Write a hook useToggle that manages boolean state (true/false) and returns current value + a toggle function.
+2. Create useLocalStorage hook to sync state with localStorage.
+3. Build usePrevious hook to get the previous value of a prop or state.
+4. Make a useDebounce hook that delays updating a value by a set time (used in search inputs).
+5. Combine useFetch and useLocalStorage to fetch data and cache it locally.
