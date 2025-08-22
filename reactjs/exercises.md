@@ -132,3 +132,9 @@ const users = [
 1. Fetch and display paginated API data with React Query.
 2. Implement add/delete functionality with useMutation.
 3. Use query invalidation to update UI after mutations.
+
+## Section P: Redux Toolkit
+
+1. Build a todo app with Redux Toolkit and add async API calls.
+2. Add loading and error states for async actions.
+3. Explore Redux DevTools for debugging.

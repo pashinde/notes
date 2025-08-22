@@ -1967,3 +1967,106 @@ function AddTodo() {
 | useMutation    | Create/update/delete data          |
 | useQueryClient | Access cache & trigger refetches   |
 | Query Keys     | Unique identifiers for cached data |
+
+# Section P: Redux Toolkit
+
+### 1. What is Redux Toolkit?
+
+- Official, recommended way to write Redux logic.
+- Simplifies Redux setup and reduces boilerplate.
+- Provides utilities like createSlice, createAsyncThunk.
+
+### 2. Setup
+
+```
+npm install @reduxjs/toolkit react-redux
+```
+
+### 3. Example: Counter Slice
+
+```
+// counterSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = { value: 0 };
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState,
+  reducers: {
+    increment(state) {
+      state.value++;
+    },
+    decrement(state) {
+      state.value--;
+    }
+  }
+});
+
+export const { increment, decrement } = counterSlice.actions;
+export default counterSlice.reducer;
+```
+
+#### Using in React
+
+```
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from './counterSlice';
+
+function Counter() {
+  const count = useSelector(state => state.counter.value);
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <h1>Count: {count}</h1>
+      <button onClick={() => dispatch(increment())}>+</button>
+      <button onClick={() => dispatch(decrement())}>-</button>
+    </>
+  );
+}
+```
+
+#### Store Setup
+
+```
+import { configureStore } from '@reduxjs/toolkit';
+import counterReducer from './counterSlice';
+
+const store = configureStore({
+  reducer: { counter: counterReducer }
+});
+
+export default store;
+```
+
+Wrap your app with _\<Provider store={store}>_ from react-redux.
+
+#### Async with createAsyncThunk
+
+```
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
+export const fetchUser = createAsyncThunk('user/fetchUser', async (userId) => {
+  const response = await fetch(`https://api.example.com/user/${userId}`);
+  return response.json();
+});
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: { data: null, status: 'idle', error: null },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchUser.pending, state => { state.status = 'loading'; })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.data = action.payload;
+      })
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  }
+});
+```
