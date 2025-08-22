@@ -2150,3 +2150,836 @@ function Counter() {
 - Supports middleware, persistence.
 - Selective re-rendering with selectors.
 - Works great for medium apps or as a companion to other libs.
+
+# Section S: Debugging React Applications: Tools, Techniques & Best Practices
+
+## 1. Essential Tools for Debugging React
+
+### 1. React Developer Tools (Browser Extension)
+
+- Official browser extension for Chrome and Firefox.
+- Lets you inspect the React component tree.
+- View props, state, context, and hooks.
+- Profile renders to detect performance bottlenecks.
+- Highlight components that re-render too often.
+
+#### How to use:
+
+- Install from Chrome Web Store / Firefox Add-ons.
+- Open DevTools > React tab.
+- Select any component to inspect current props/state.
+- Use Profiler tab to record render times and identify slow components.
+
+### 2. Browser DevTools (Console, Network, Sources)
+
+- Console: Check errors, warnings, and logs (console.log, console.error).
+- Sources: Set breakpoints, step through code.
+- Network: Inspect API calls, status, response data.
+- Performance: Record UI thread and scripting for slow interactions.
+
+### 3. Debugging in IDE (VSCode)
+
+- Use Chrome Debugger extension or VSCode’s built-in JS debugger.
+- Set breakpoints in .jsx files, step through React code.
+- Inspect variables, call stacks, and component prop-
+
+## 2. Common Debugging Techniques
+
+### 1. Use Console Logging Wisely
+
+- console.log() is simplest, but too many logs clutter output.
+- Use console.table() for arrays/objects.
+- console.error() and console.warn() highlight issues.
+- Clean up logs after debugging.
+
+Example:
+
+```
+console.log('Current user:', user);
+```
+
+### 2. Use React Developer Tools to Inspect Component State
+
+- Inspect prop values passed to components.
+- Check local state with hooks.
+- Validate if expected values exist or not.
+
+### 3. Breakpoints & Step Debugging
+
+- Pause code execution at certain lines.
+- Step over/into functions to see flow.
+- Inspect call stack to trace origin of errors.
+
+### 4. Error Boundaries for React Runtime Errors
+
+- React 16+ supports error boundaries to catch JS errors in components.
+- Use to display fallback UI instead of breaking the app.
+
+Example:
+
+```
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught:", error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <h1>Something went wrong.</h1>;
+    }
+    return this.props.children;
+  }
+}
+```
+
+### 5. Use PropTypes or TypeScript for Type Checking
+
+- Catch bugs caused by wrong props passed.
+- PropTypes: runtime validation.
+- TypeScript: static type checks during development.
+
+### 6. Debugging Hooks
+
+- Verify hook usage rules (e.g., don’t call hooks conditionally).
+- Use React DevTools to inspect hook states.
+- Use custom debug hooks if needed to log hook values.
+
+### 7. Network/API Debugging
+
+- Check API responses in DevTools Network tab.
+- Use tools like Postman or Insomnia for API testing.
+- Handle fetch errors and loading states in U-
+
+### 8. Profiling for Performance Issues
+
+- Use React Profiler to find unnecessary renders.
+- Optimize with memoization (React.memo, useMemo, useCallback).
+- Lazy load components and code split.
+
+## 3. Best Practices for React Debugging
+
+| Best Practice                    | Explanation                                          |
+| :------------------------------- | :--------------------------------------------------- |
+| Write clean, readable code       | Easier to debug and maintain.                        |
+| Use meaningful component names   | Helps identify components in React DevTools.         |
+| Use error boundaries             | Prevent UI crashes and show fallback UI.             |
+| Use source maps in production    | Get readable stack traces in production errors.      |
+| Log errors to monitoring service | Sentry, LogRocket for real-time error tracking.      |
+| Test components independently    | Use Storybook or unit tests to isolate bugs.         |
+| Avoid inline anonymous functions | Improves React DevTools readability and performance. |
+
+## 4. Example Debugging Workflow
+
+Scenario: A button click does not update UI state
+
+1. Open React DevTools and select the component with the button.
+2. Check if the component state updates after the button click.
+3. Add a console.log inside the click handler to confirm it fires.
+4. Set a breakpoint in VSCode on the click handler.
+5. Step through handler to see if setState or useState setter is called.
+6. Confirm props/state flow from parent component.
+7. If state updates but UI doesn’t, check render logic or conditional rendering.
+
+## 5. Useful Debugging Tips & Tricks
+
+- Use debugger; statement in your code to programmatically trigger breakpoints.
+- Use React.StrictMode to identify unsafe lifecycles and side effects.
+- Wrap async functions with try/catch and log errors explicitly.
+- Keep an eye on warnings React gives — often they point to bugs.
+- Use console.trace() to see the call stack for a log.
+- Test on multiple browsers and devices.
+
+## 6. Tools & Libraries to Enhance Debugging
+
+- Sentry — Real-time error tracking in production.
+- LogRocket — Session replay for frontend bugs.
+- why-did-you-render — Detect unnecessary React renders.
+- React Profiler API — Programmatic profiling for deeper insights.
+
+### Summary Checklist
+
+| Step                    | Tool / Technique             |
+| :---------------------- | :--------------------------- |
+| Inspect component state | React Developer Tools        |
+| Track network requests  | Browser DevTools Network Tab |
+| Debug JS flow           | Console.log, Breakpoints     |
+| Catch UI errors         | Error Boundaries             |
+| Check performance       | React Profiler               |
+| Type safety             | PropTypes / TypeScript       |
+
+# Section T: Testing React Applications: Unit Tests & End-to-End Tests
+
+## 1. Testing Types Overview
+
+| Test Type              | What it Tests                                      | Scope Tools Commonly Used                                           |
+| :--------------------- | :------------------------------------------------- | :------------------------------------------------------------------ |
+| Unit Tests             | Individual components, functions                   | Smallest parts in isolation Jest, React Testing Library             |
+| Integration Tests      | Interaction between multiple components or modules | Combined parts working together Jest + React Testing Library        |
+| End-to-End (E2E) Tests | Full app flow in browser, simulating user behavior | Whole app running in real environment Cypress, Playwright, Selenium |
+
+## 2. Popular Testing Tools for React
+
+### Unit & Integration Testing
+
+- **Jest**
+
+  - Facebook’s testing framework, default in Create React App.
+  - Runs tests, mocks dependencies, provides coverage reports.
+
+- **React Testing Library (RTL)**
+  - Focuses on testing UI from user perspective (queries by text, role).
+  - Encourages good testing practices rather than testing implementation details.
+
+### End-to-End Testing
+
+- **Cypress**
+  - Modern, easy-to-use E2E testing framework.
+  - Runs tests in real browsers with excellent debugging tools.
+- **Playwright**
+  - Cross-browser E2E testing by Microsoft.
+- **Selenium**
+  - Older, widely-used E2E framework (more complex to set up).
+
+## 3. Setting up Unit Tests with Jest & React Testing Library
+
+### Installation
+
+If you’re using Create React App, Jest and RTL come pre-installed.
+For other setups:
+
+```
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
+
+### Writing Your First Unit Test
+
+Say we have a simple button component:
+
+```
+// Button.js
+export default function Button({ onClick, children }) {
+  return <button onClick={onClick}>{children}</button>;
+}
+```
+
+Test file: Button.test.js
+
+```
+import { render, screen, fireEvent } from '@testing-library/react';
+import Button from './Button';
+
+test('renders button and handles click', () => {
+  const handleClick = jest.fn(); // mock function
+
+  render(<Button onClick={handleClick}>Click Me</Button>);
+
+  const button = screen.getByText(/click me/i);
+  expect(button).toBeInTheDocument();
+
+  fireEvent.click(button);
+
+  expect(handleClick).toHaveBeenCalledTimes(1);
+});
+```
+
+#### Explanation
+
+- render() mounts the component in a virtual DOM.
+- screen queries DOM elements similar to user perspective (by text, role, label).
+- fireEvent.click() simulates user clicking.
+- jest.fn() mocks a function to track calls.
+
+### Testing Props & Conditional Rendering
+
+Suppose a component that renders different text based on prop:
+
+```
+function Greeting({ isLoggedIn }) {
+  return <h1>{isLoggedIn ? 'Welcome back!' : 'Please sign in.'}</h1>;
+}
+```
+
+Test:
+
+```
+test('renders welcome message when logged in', () => {
+  render(<Greeting isLoggedIn={true} />);
+  expect(screen.getByText(/welcome back/i)).toBeInTheDocument();
+});
+
+test('renders sign-in prompt when not logged in', () => {
+  render(<Greeting isLoggedIn={false} />);
+  expect(screen.getByText(/please sign in/i)).toBeInTheDocument();
+});
+```
+
+## 4. Writing More Complex Tests
+
+#### Testing Async Behavior (API calls)
+
+Use waitFor or findBy queries for async UI updates.
+
+```
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+test('loads and displays user data', async () => {
+  render(<UserProfile userId={1} />);
+
+  // Initially show loading
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  // Wait for user name to appear after fetch
+  const userName = await screen.findByText(/john doe/i);
+  expect(userName).toBeInTheDocument();
+});
+```
+
+#### Snapshot Testing
+
+Capture UI output and track changes over time.
+
+```
+import renderer from 'react-test-renderer';
+
+test('button renders correctly', () => {
+  const tree = renderer.create(<Button>Click</Button>).toJSON();
+  expect(tree).toMatchSnapshot();
+});
+```
+
+## 5. End-to-End (E2E) Testing with Cypress
+
+#### Setup Cypress
+
+```
+npm install --save-dev cypress
+```
+
+#### Add script in package.json:
+
+```
+"scripts": {
+  "cypress:open": "cypress open"
+}
+```
+
+#### Run tests:
+
+```
+npm run cypress:open
+```
+
+#### Writing a Basic E2E Test
+
+```
+// cypress/integration/login.spec.js
+describe('Login Flow', () => {
+  it('allows user to login', () => {
+    cy.visit('/login');
+    cy.get('input[name=username]').type('user1');
+    cy.get('input[name=password]').type('password');
+    cy.get('button[type=submit]').click();
+    cy.url().should('include', '/dashboard');
+    cy.contains('Welcome, user1');
+  });
+});
+```
+
+#### Explanation
+
+- cy.visit() opens a page.
+- cy.get() finds DOM elements.
+- .type() simulates typing.
+- .click() simulates clicking.
+- .should() asserts conditions (URL, content, etc.).
+
+## 6. Best Practices for Testing React Apps
+
+| Best Practice                     | Explanation                                                    |
+| :-------------------------------- | :------------------------------------------------------------- |
+| Test behavior, not implementation | Use React Testing Library queries to simulate user experience. |
+| Write small, focused tests        | Each test should check one thing only.                         |
+| Use mocks and spies wisely        | Avoid over-mocking to keep tests realistic.                    |
+| Keep tests fast and deterministic | Avoid flakiness with controlled mocks and timers.              |
+| Test edge cases and error states  | Cover unexpected input or failures.                            |
+| Use snapshots sparingly           | For stable UI components only, not frequently changing ones.   |
+| Combine unit & E2E testing        | Unit tests for logic, E2E for user flows.                      |
+| Integrate tests into CI/CD        | Run tests automatically on commits/pull requests.              |
+
+## 6. Summary Workflow for React Testing
+
+1. Write unit tests for components and logic with Jest + RTL.
+2. Mock API calls using jest.mock() or libraries like msw (Mock Service Worker).
+3. Run tests locally and on CI.
+4. Write E2E tests with Cypress for critical user journeys.
+5. Use code coverage reports to find untested code.
+6. Refactor and keep tests updated as app evolves.
+
+#### Useful Libraries for React Testing
+
+| Library                     | Purpose                                   |
+| :-------------------------- | :---------------------------------------- |
+| @testing-library/react      | Render and interact with React components |
+| @testing-library/user-event | More realistic user interactions          |
+| jest                        | Test runner & assertion framework         |
+| msw                         | Mock Service Worker for API mocking       |
+| cypress                     | E2E testing framework                     |
+| react-test-renderer         | Snapshot testing                          |
+
+## 7. Walkthrough: Building Unit & E2E Tests for a Sample React App
+
+### Sample App: Todo List
+
+We'll create a small Todo List app where users can:
+
+- Add todos
+- Mark todos as completed
+- See a list of todos
+
+### Step 1: Set Up the React App
+
+If you don’t have a React app yet, create one using Create React App (CRA):
+
+```
+npx create-react-app todo-app
+cd todo-app
+```
+
+### Step 2: Build a Simple Todo Component
+
+Create a file src/TodoApp.js with this basic component:
+
+```
+import React, { useState } from 'react';
+
+export default function TodoApp() {
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  const addTodo = () => {
+    if (inputValue.trim() === '') return;
+    setTodos([...todos, { text: inputValue, completed: false }]);
+    setInputValue('');
+  };
+
+  const toggleComplete = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].completed = !newTodos[index].completed;
+    setTodos(newTodos);
+  };
+
+  return (
+    <div>
+      <h1>Todo List</h1>
+      <input
+        placeholder="Enter todo"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+        aria-label="todo-input"
+      />
+      <button onClick={addTodo}>Add Todo</button>
+      <ul>
+        {todos.map((todo, i) => (
+          <li
+            key={i}
+            onClick={() => toggleComplete(i)}
+            style={{ textDecoration: todo.completed ? 'line-through' : 'none', cursor: 'pointer' }}
+            aria-label={`todo-item-${i}`}
+          >
+            {todo.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+Modify src/App.js to render this:
+
+```
+import React from 'react';
+import TodoApp from './TodoApp';
+
+function App() {
+  return <TodoApp />;
+}
+
+export default App;
+```
+
+Run the app with npm start to check it works.
+
+### Step 3: Write Unit Tests with Jest & React Testing Library
+
+#### 3.1 Install Testing Dependencies (if needed)
+
+If you used CRA, Jest & RTL are pre-installed. Otherwise:
+
+```
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+```
+
+#### 3.2 Create src/TodoApp.test.js
+
+```
+import { render, screen, fireEvent } from '@testing-library/react';
+import TodoApp from './TodoApp';
+
+describe('TodoApp component', () => {
+  test('renders input, button and empty todo list', () => {
+    render(<TodoApp />);
+
+    expect(screen.getByRole('textbox', { name: /todo-input/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /add todo/i })).toBeInTheDocument();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+
+  test('adds a todo to the list when Add Todo button clicked', () => {
+    render(<TodoApp />);
+
+    const input = screen.getByRole('textbox', { name: /todo-input/i });
+    const button = screen.getByRole('button', { name: /add todo/i });
+
+    fireEvent.change(input, { target: { value: 'Write tests' } });
+    fireEvent.click(button);
+
+    expect(screen.getByText('Write tests')).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem')).toHaveLength(1);
+  });
+
+  test('toggles todo completion on click', () => {
+    render(<TodoApp />);
+
+    const input = screen.getByRole('textbox', { name: /todo-input/i });
+    const button = screen.getByRole('button', { name: /add todo/i });
+
+    fireEvent.change(input, { target: { value: 'Write tests' } });
+    fireEvent.click(button);
+
+    const todoItem = screen.getByText('Write tests');
+
+    // Initially not completed (no line-through)
+    expect(todoItem).toHaveStyle('text-decoration: none');
+
+    // Click toggles completion
+    fireEvent.click(todoItem);
+    expect(todoItem).toHaveStyle('text-decoration: line-through');
+
+    // Click again toggles back
+    fireEvent.click(todoItem);
+    expect(todoItem).toHaveStyle('text-decoration: none');
+  });
+
+  test('does not add empty todos', () => {
+    render(<TodoApp />);
+
+    const button = screen.getByRole('button', { name: /add todo/i });
+
+    fireEvent.click(button);
+
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+});
+```
+
+#### 3.3 Run Unit Tests
+
+```
+npm test
+```
+
+- Jest will pick up .test.js files and run the tests.
+- You should see all tests passing!
+
+### Step 4: Write End-to-End (E2E) Tests with Cypress
+
+#### 4.1 Install Cypress
+
+```
+npm install --save-dev cypress
+```
+
+Add this to your package.json scripts:
+
+```
+"scripts": {
+  "cypress:open": "cypress open"
+}
+```
+
+#### 4.2 Initialize Cypress
+
+```
+npm run cypress:open
+```
+
+This opens the Cypress test runner for the first time and creates a default folder structure: cypress/.
+
+#### 4.3 Create E2E Test: cypress/e2e/todo.spec.js
+
+```
+describe('Todo App E2E Tests', () => {
+  beforeEach(() => {
+    cy.visit('http://localhost:3000'); // Adjust if your dev server is on different port
+  });
+
+  it('should load the todo app', () => {
+    cy.contains('Todo List');
+    cy.get('input[aria-label="todo-input"]').should('exist');
+    cy.get('button').contains('Add Todo').should('exist');
+  });
+
+  it('should add a new todo', () => {
+    cy.get('input[aria-label="todo-input"]').type('Learn Cypress');
+    cy.get('button').contains('Add Todo').click();
+    cy.get('li').should('have.length', 1).and('contain.text', 'Learn Cypress');
+  });
+
+  it('should toggle todo completion on click', () => {
+    cy.get('input[aria-label="todo-input"]').type('Test completion');
+    cy.get('button').contains('Add Todo').click();
+
+    cy.get('li').contains('Test completion').as('todoItem');
+
+    // Check initial state (no line-through)
+    cy.get('@todoItem').should('have.css', 'text-decoration').and('not.contain', 'line-through');
+
+    // Click to toggle complete
+    cy.get('@todoItem').click();
+    cy.get('@todoItem').should('have.css', 'text-decoration').and('contain', 'line-through');
+
+    // Click to toggle back
+    cy.get('@todoItem').click();
+    cy.get('@todoItem').should('have.css', 'text-decoration').and('not.contain', 'line-through');
+  });
+
+  it('should not add empty todos', () => {
+    cy.get('button').contains('Add Todo').click();
+    cy.get('li').should('have.length', 0);
+  });
+});
+```
+
+#### 4.4 Run Cypress Tests
+
+- Make sure your React app is running (npm start).
+- Run Cypress test runner:
+
+```
+npm run cypress:open
+```
+
+- Click the test file in Cypress UI to run tests in browser.
+- Watch tests run interactively and check results.
+
+## 8. Deep Dive: Mocking APIs in React Testing
+
+### 1. Why Mock APIs?
+
+When your React app fetches data from an API (e.g., using fetch or axios), in tests you don’t want to:
+
+- Depend on real network calls (can be slow, flaky, or unstable).
+- Rely on backend being up or data state.
+
+Mocking lets you replace the real network call with a fake one that returns controlled data.
+
+### 2. Common Mocking Strategies
+
+| Approach                                      | Description                                                                 | When to Use                               |
+| :-------------------------------------------- | :-------------------------------------------------------------------------- | :---------------------------------------- |
+| **Jest manual mocks**                         | Mock fetch or axios directly in tests using Jest mocks.                     | Simple, for small test cases.             |
+| **MSW (Mock Service Worker)**                 | Intercepts network calls at network level, works in both tests and browser. | More realistic and scalable.              |
+| **Mock libraries (e.g., axios-mock-adapter)** | Mock axios requests specifically.                                           | When axios is used heavily.               |
+| **Mock functions / dependency injection**     | Pass mock functions as props or context to simulate API responses.          | For components accepting fetch functions. |
+
+### 3. Mocking with Jest: Example Using fetch
+
+#### Example: Component that fetches and displays user data
+
+```
+// UserProfile.js
+import React, { useEffect, useState } from 'react';
+
+export default function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Network error');
+        return res.json();
+      })
+      .then((data) => {
+        setUser(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [userId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>{user.email}</p>
+    </div>
+  );
+}
+```
+
+#### Writing a test with fetch mocked by Jest
+
+```
+import { render, screen, waitFor } from '@testing-library/react';
+import UserProfile from './UserProfile';
+
+beforeEach(() => {
+  // Reset fetch mock before each test
+  global.fetch = jest.fn();
+});
+
+afterEach(() => {
+  jest.resetAllMocks();
+});
+
+test('displays user data after successful fetch', async () => {
+  const mockUser = { name: 'John Doe', email: 'john@example.com' };
+
+  // Mock fetch response
+  global.fetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => mockUser,
+  });
+
+  render(<UserProfile userId={1} />);
+
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  // Wait for user name to appear
+  const userName = await screen.findByText('John Doe');
+  expect(userName).toBeInTheDocument();
+  expect(screen.getByText('john@example.com')).toBeInTheDocument();
+});
+
+test('displays error message on fetch failure', async () => {
+  global.fetch.mockResolvedValueOnce({
+    ok: false,
+  });
+
+  render(<UserProfile userId={1} />);
+
+  const errorMsg = await screen.findByText(/error/i);
+  expect(errorMsg).toBeInTheDocument();
+});
+```
+
+### 4. Mocking with MSW (Mock Service Worker)
+
+#### Why MSW?
+
+- Intercepts actual network requests at the network layer.
+- Works seamlessly in both unit tests and development environment.
+- Supports REST and GraphQL APIs.
+- Easy to define request handlers and return mocked responses.
+
+#### Installation
+
+```
+npm install msw --save-dev
+```
+
+#### Basic Setup
+
+1. Create a file src/mocks/handlers.js with handlers:
+
+```
+import { rest } from 'msw';
+
+export const handlers = [
+  rest.get('https://jsonplaceholder.typicode.com/users/:userId', (req, res, ctx) => {
+    const { userId } = req.params;
+
+    return res(
+      ctx.status(200),
+      ctx.json({ id: userId, name: 'Jane Doe', email: 'jane@example.com' })
+    );
+  }),
+];
+```
+
+2. Setup MSW server for testing src/mocks/server.js:
+
+```
+import { setupServer } from 'msw/node';
+import { handlers } from './handlers';
+
+export const server = setupServer(...handlers);
+```
+
+3. Initialize server in your test setup file src/setupTests.js (CRA picks this up automatically):
+
+```
+import { server } from './mocks/server.js';
+
+// Start MSW before all tests
+beforeAll(() => server.listen());
+
+// Reset handlers after each test (so tests don't affect each other)
+afterEach(() => server.resetHandlers());
+
+// Clean up after tests are finished
+afterAll(() => server.close());
+```
+
+#### Test example using MSW with UserProfile component
+
+```
+import { render, screen } from '@testing-library/react';
+import UserProfile from './UserProfile';
+
+test('loads and displays user data with MSW', async () => {
+  render(<UserProfile userId={123} />);
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+  const userName = await screen.findByText('Jane Doe');
+  expect(userName).toBeInTheDocument();
+  expect(screen.getByText('jane@example.com')).toBeInTheDocument();
+});
+```
+
+### 5. When to Use Which?
+
+| Approach           | Pros                                        | Cons                                   |
+| :----------------- | :------------------------------------------ | :------------------------------------- |
+| Jest fetch mocks   | Simple to set up, good for isolated tests   | Can become complex with many endpoints |
+| MSW                | More realistic, reusable across dev & tests | Slightly more setup upfront            |
+| axios-mock-adapter | Easy for axios users, mocks at axios level  | Only works with axios, not fetch       |
+
+### 6. Bonus Tips
+
+- For error states, simulate server errors with MSW:
+
+```
+server.use(
+  rest.get('https://jsonplaceholder.typicode.com/users/:userId', (req, res, ctx) => {
+    return res(ctx.status(500), ctx.json({ message: 'Internal Server Error' }));
+  })
+);
+```
+
+- For **delays**, add latency with ctx.delay(150) to simulate network delays.
+- Combine **MSW** with **React Testing Library** for robust integration tests that behave like real app usage.
