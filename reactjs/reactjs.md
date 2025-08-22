@@ -2111,3 +2111,42 @@ function LoginForm() {
 - Minimal re-renders for performance.
 - Easy integration with UI libraries.
 - Supports controlled and uncontrolled components.
+
+# Section R: Zustand
+
+### 1. What is Zustand?
+
+- Small, fast state management library.
+- Minimal API, simple to learn.
+- Uses hooks for global state
+
+### 2. Basic Example
+
+```
+import create from 'zustand';
+
+const useStore = create(set => ({
+  count: 0,
+  increment: () => set(state => ({ count: state.count + 1 })),
+  decrement: () => set(state => ({ count: state.count - 1 }))
+}));
+
+function Counter() {
+  const { count, increment, decrement } = useStore();
+
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={increment}>+</button>
+      <button onClick={decrement}>-</button>
+    </>
+  );
+}
+```
+
+### 3. Why Zustand?
+
+- Simple API, no boilerplate.
+- Supports middleware, persistence.
+- Selective re-rendering with selectors.
+- Works great for medium apps or as a companion to other libs.

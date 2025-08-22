@@ -144,3 +144,9 @@ const users = [
 1. Build a form with validation for required fields.
 2. Integrate form submission with API.
 3. Use form-level and field-level validation.
+
+## Section R: Zustand
+
+1. Build a todo app with Zustand.
+2. Add persistence with middleware.
+3. Use selectors to optimize re-renders.
